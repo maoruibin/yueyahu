@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-base: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-surface-hover: var(--bg-surface-hover);
+  --color-nav: var(--bg-nav);
+  --color-footer: var(--bg-footer);
+  --color-overlay: var(--bg-overlay);
+  
+  --color-primary: var(--text-primary);
+  --color-muted: var(--text-muted);
+  --color-inverse: var(--text-inverse);
+  
+  --color-subtle: var(--border-subtle);
+  
+  --color-gold: var(--accent-gold);
+  --color-gold-hover: var(--accent-gold-hover);
+  
+  --font-serif: "Noto Serif SC", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+:root {
+  /* LIGHT MODE (Default) */
+  --bg-base: #F4F1EA;
+  --bg-surface: #E8E5DC;
+  --bg-surface-hover: #DFDBD2;
+  --bg-nav: rgba(244, 241, 234, 0.85);
+  --bg-footer: #EBE7DF;
+  --bg-overlay: rgba(244, 241, 234, 0.95);
+  
+  --text-primary: #1F1E1C;
+  --text-muted: #6B685E;
+  --text-inverse: #F4F1EA;
+  
+  --border-subtle: #D8D4C8;
+  
+  --accent-gold: #B28822; /* Darker gold for light mode text readability */
+  --accent-gold-hover: #967015;
+}
+
+.dark {
+  /* DARK MODE */
+  --bg-base: #121212;
+  --bg-surface: #1C1C19;
+  --bg-surface-hover: #2A2A26;
+  --bg-nav: rgba(18, 18, 18, 0.85);
+  --bg-footer: #0A0A0A;
+  --bg-overlay: rgba(0, 0, 0, 0.95);
+  
+  --text-primary: #EAE6DF;
+  --text-muted: #A3A098;
+  --text-inverse: #121212;
+  
+  --border-subtle: #2A2A26;
+  
+  --accent-gold: #D4AF37;
+  --accent-gold-hover: #E5C354;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-base);
+  color: var(--color-primary);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-subtle);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+/* Ensure no-select classes are fully respected */
+.prevent-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}

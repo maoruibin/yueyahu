@@ -1,11 +1,69 @@
-<div align="center">
+# 数字月牙湖 (Digital Yueyahu)
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+这是一个个人公益项目，旨在为甘肃省永昌县月牙湖村（五社、六社）建立一个数字化的“时间胶囊”和档案库。
+它承载着远方游子对故乡的牵挂，留存了珍贵的历史证件、祖辈开荒的记忆与家乡的风貌变迁。
 
-  <h1>Built with AI Studio</h2>
+## 技术栈与部署
+- **前端框架**: React 19 + TypeScript + Vite
+- **样式方案**: Tailwind CSS
+- **部署方式**: 推荐部署至 Cloudflare Pages 或 Vercel (纯静态部署)
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+---
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## 📂 档案数据管理规范 (核心维护指南)
 
-</div>
+本项目由于作为纯静态网站部署，且注重加载速度和维护成本，因此采用 **“云存储 + 本地静态配置”** 的策略来管理所有的档案资料。
+
+### 1. 媒体文件云存储保护
+为了避免 GitHub 代码仓库变得臃肿，所有的图片、视频、音频原文件**严禁**直接存放在代码中。
+- **上传流程**：请将历史老照片、证件扫描件、音频、视频等文件，统一上传至您的云存储平台（如七牛云、又拍云、阿里云 OSS 等）。
+- **图片保护**：建议在云存储后台开启“防盗链”（Referer 白名单），仅允许本网站的域名访问这些图片，防止被别人盗刷流量。您也可以在云存储端配置自动添加水印。
+
+### 2. 档案数据映射 (src/data/archive.ts)
+网站页面上显示的所有档案列表、文案、年份以及上面获取到的云端链接，全部集中维护在 `src/data/archive.ts` 文件中。
+
+#### 如何添加一份新的历史资料？
+1. 将照片或录音上传到您的云存储，获取公网访问链接（URL）。
+2. 在代码编辑器中打开 `src/data/archive.ts` 文件。
+3. 找到导出的 `archiveData` 数组，在合适的位置新增一条记录。记录的数据结构如下：
+
+```typescript
+{
+  id: 'vis-new-1',               // 必填：必须是唯一的标识符 (建议使用 前缀-序号 的方式)
+  type: 'visual',                // 必填：档案分类，可选值 ['document', 'visual', 'audio', 'video']
+                                 // - document: 文献印鉴 (如合同、通知单)
+                                 // - visual: 光影纪实 (旧照片)
+                                 // - audio: 乡音留声 (录音)
+                                 // - video: 影像 (航拍或老视频)
+  title: '1990年全村大合照',        // 必填：展示的标题
+  description: '文字描述，记录背后的故事...', // 必填：详情描述
+  date: '1990',                  // 必填：年份或具体日期
+  url: 'https://你的云存储域名.com/image.jpg', // 必填：在上一步获取的云存储真实链接
+  poster: 'https://...'          // 选填：如果是 video 视频类型，可以在这里放一张封面的图片链接
+}
+```
+
+每次您向数组中添加新的对象后，只需要将代码推送到 GitHub，Cloudflare Pages 就会自动触发重新构建，新添加的档案就会展示在网站上。
+
+---
+
+## 🛠 本地开发指南
+
+1. **安装依赖**
+   ```bash
+   npm install
+   ```
+
+2. **启动本地开发服务器**
+   ```bash
+   npm run dev
+   ```
+
+3. **构建生产版本**
+   ```bash
+   npm run build
+   ```
+   构建完成后，生成的静态文件会存放在 `dist` 目录下。您也可以将此目录手动上传进行部署。
+
+## 📄 声明
+本项目纯属个人兴趣驱动，自费维护，是非官方、非盈利的数字化记录行为。所有展示资料仅供乡情寄托与历史记忆留存。

@@ -1,0 +1,6 @@
+{
+  "name": "数字月牙湖",
+  "description": "数字月牙湖是一座甘肃永昌县月牙湖村的云端记忆档案馆，承载着村民的档案、历史和记忆。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
