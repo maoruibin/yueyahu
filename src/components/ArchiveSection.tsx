@@ -1,6 +1,6 @@
 import { ArchiveItem } from '../data/archive';
 import { ProtectedMedia } from './ProtectedMedia';
-import { Play, ArrowRight } from 'lucide-react';
+import { Play, ArrowRight, Images } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface ArchiveSectionProps {
@@ -55,15 +55,33 @@ export function ArchiveSection({ items, title, viewMoreLink, onItemClick }: Arch
                        </div>
                      )}
                    </>
+                 ) : item.gallery && item.gallery.length > 1 ? (
+                   <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-0.5">
+                     {item.gallery.slice(0, 4).map((img, i) => (
+                       <img
+                         key={i}
+                         src={img}
+                         alt={`${item.title} - ${i + 1}`}
+                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
+                         draggable={false}
+                       />
+                     ))}
+                   </div>
                  ) : (
-                   <img 
-                     src={item.cover || item.url} 
+                   <img
+                     src={item.cover || item.url}
                      alt={item.title}
                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-105 transform"
                      draggable={false}
                    />
                  )}
                </ProtectedMedia>
+               {item.gallery && item.gallery.length > 0 && (
+                 <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full flex items-center gap-1.5 pointer-events-none">
+                   <Images size={12} />
+                   <span>{item.gallery.length}</span>
+                 </div>
+               )}
             </div>
             
             <div className="flex justify-between items-start mb-2">

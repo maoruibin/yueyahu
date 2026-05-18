@@ -7,6 +7,7 @@ export interface ArchiveItem {
   url: string;
   poster?: string;
   cover?: string;
+  gallery?: string[];
 }
 
 const BASE_URL = 'https://s3.bitiful.net/gudong/yueyahu';
@@ -41,7 +42,7 @@ export const archiveData: ArchiveItem[] = [
     cover: `${BASE_URL}/document/1991年土地承包经济合同书-侯作录/主页封面.jpg`,
   },
 
-  // 光影纪实 — 人物
+  // 光影纪实
   {
     id: 'vis-1',
     type: 'visual',
@@ -74,46 +75,82 @@ export const archiveData: ArchiveItem[] = [
     date: '年代不详',
     url: `${BASE_URL}/visual/月牙湖的孩子们3.png`,
   },
-
-  // 光影纪实 — 土地实拍
   {
-    id: 'vis-5',
+    id: 'vis-gallery-4',
     type: 'visual',
-    title: '黑山子地西输水子渠',
-    description: '田成荣于2023年4月实拍，月牙湖黑山子地的西输水子渠，灌溉着世代村民的口粮田。',
-    date: '2023-04-06',
+    title: '月牙湖的土地',
+    description: '田成荣于2023年4月实拍月牙湖各地块，输水渠、犁沟、地埂……每寸土地都刻着庄稼人的辛劳。',
+    date: '2023-04',
     url: `${BASE_URL}/visual/月牙湖黑山子地西输水子渠-2023-04-06-田成荣.jpg`,
+    gallery: [
+      `${BASE_URL}/visual/月牙湖黑山子地西输水子渠-2023-04-06-田成荣.jpg`,
+      `${BASE_URL}/visual/月牙湖它洞子三横地埂-2023-04-20-田成荣.jpg`,
+      `${BASE_URL}/visual/月牙谷茬子地中斜梁下面犁沟-2023-04-27-田成荣.jpg`,
+      `${BASE_URL}/visual/月牙弓坡槽子地犁沟-2023-04-29-田成荣.jpg`,
+      `${BASE_URL}/visual/月牙湖北古地他洞子犁沟-2023-0420-田成荣.jpg`,
+    ],
   },
   {
-    id: 'vis-6',
+    id: 'vis-gallery-1',
     type: 'visual',
-    title: '它洞子三横地埂',
-    description: '田成荣于2023年4月实拍，它洞子三横地埂的田地风貌，黄土与绿意交织。',
-    date: '2023-04-20',
-    url: `${BASE_URL}/visual/月牙湖它洞子三横地埂-2023-04-20-田成荣.jpg`,
+    title: '冬天的月牙湖村',
+    description: '2015年12月8日，冬天回老家，走遍村子拍下这些照片。土巷子、晒太阳的老人、老土墙……如今很多房子已拆，这些是最后的记忆。',
+    date: '2015-12-08',
+    url: `${BASE_URL}/visual/2015-12-08-村貌纪行/大家一起晒太阳.jpg`,
+    gallery: [
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/大家一起晒太阳.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/尹叔家的小道-弹玻璃弹珠的地方.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/侯家院子.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/侯有武家院子.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/后队一个巷子.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/后队里一个巷子.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/大场中的老榆树.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/尹叔家外墙，曾经驻军时标语.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/山坡.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/杏树院子.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/村口的路.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/村里浇水时的水沟.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/村里的大路主干道.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/村里篮球场.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/柴老师院子.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/毛家道.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/沙梁头.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/沙滩边子.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/王永鹏家.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/田地.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/老古井.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/老土墙.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/赵家道.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/遥看前山坡.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/陈奶奶家.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/陈家房子.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/骑摩托的人.jpg`,
+      `${BASE_URL}/visual/2015-12-08-村貌纪行/黄鸿家院子.jpg`,
+    ],
   },
   {
-    id: 'vis-7',
+    id: 'vis-gallery-2',
     type: 'visual',
-    title: '茬子地中斜梁下面犁沟',
-    description: '田成荣于2023年4月实拍，茬子地中斜梁下的犁沟，是庄稼人一年辛劳的痕迹。',
-    date: '2023-04-27',
-    url: `${BASE_URL}/visual/月牙谷茬子地中斜梁下面犁沟-2023-04-27-田成荣.jpg`,
+    title: '月牙湖村的记忆',
+    description: '2013年拍摄，我们的小学、去下湖吃水的牛。',
+    date: '2013',
+    url: `${BASE_URL}/visual/2013年/我们的小学.jpg`,
+    gallery: [
+      `${BASE_URL}/visual/2013年/我们的小学.jpg`,
+      `${BASE_URL}/visual/2013年/去下湖吃水的牛.jpg`,
+    ],
   },
   {
-    id: 'vis-8',
+    id: 'vis-gallery-3',
     type: 'visual',
-    title: '弓坡槽子地犁沟',
-    description: '田成荣于2023年4月实拍，弓坡槽子地的犁沟，记录着春耕时节的土地纹理。',
-    date: '2023-04-29',
-    url: `${BASE_URL}/visual/月牙弓坡槽子地犁沟-2023-04-29-田成荣.jpg`,
-  },
-  {
-    id: 'vis-9',
-    type: 'visual',
-    title: '北古地他洞子犁沟',
-    description: '田成荣于2023年4月实拍，北古地他洞子的犁沟，泥土翻滚间是丰收的期盼。',
-    date: '2023-04-20',
-    url: `${BASE_URL}/visual/月牙湖北古地他洞子犁沟-2023-0420-田成荣.jpg`,
+    title: '山顶上的月牙湖',
+    description: '2012年2月16日下午，登上山顶俯瞰月牙湖村，站在天空下敬礼，脚踩石头远眺。',
+    date: '2012-02-16',
+    url: `${BASE_URL}/visual/2012年/山顶俯瞰月牙湖.jpg`,
+    gallery: [
+      `${BASE_URL}/visual/2012年/山顶俯瞰月牙湖.jpg`,
+      `${BASE_URL}/visual/2012年/站在天空敬礼.jpg`,
+      `${BASE_URL}/visual/2012年/站在山顶，脚踩石头.jpg`,
+    ],
   },
 ];

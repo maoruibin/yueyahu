@@ -1,16 +1,27 @@
-import { X, ExternalLink } from 'lucide-react';
+import { useState } from 'react';
+import { X, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ArchiveItem } from '../data/archive';
 import { ProtectedMedia } from './ProtectedMedia';
 
 export function ArchiveViewer({ item, onClose }: { item: ArchiveItem | null, onClose: () => void }) {
+  const [galleryIndex, setGalleryIndex] = useState(0);
+
   if (!item) return null;
 
   const isPdf = item.url.toLowerCase().split('?')[0].endsWith('.pdf');
+  const isGallery = item.gallery && item.gallery.length > 0;
+  const galleryImages = isGallery ? item.gallery! : [];
+
+  const goTo = (index: number) => {
+    setGalleryIndex(Math.max(0, Math.min(index, galleryImages.length - 1)));
+  };
+
+  const resetIndex = () => setGalleryIndex(0);
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-overlay p-4 md:p-12 transition-colors">
-      <button 
-        onClick={onClose}
+      <button
+        onClick={() => { resetIndex(); onClose(); }}
         className="absolute top-6 right-6 md:top-8 md:right-12 w-12 h-12 flex items-center justify-center rounded-full bg-surface border border-subtle text-muted hover:text-primary hover:border-gold transition-all z-50 pointer-events-auto"
       >
         <X size={24} />
@@ -33,25 +44,77 @@ export function ArchiveViewer({ item, onClose }: { item: ArchiveItem | null, onC
                 <ExternalLink size={20} />
               </a>
             </div>
+          ) : isGallery ? (
+            <>
+              <ProtectedMedia>
+                <img
+                  src={galleryImages[galleryIndex]}
+                  alt={`${item.title} - ${galleryIndex + 1}`}
+                  className="w-full max-h-[calc(80vh-200px)] object-contain bg-transparent pointer-events-none"
+                  draggable={false}
+                />
+              </ProtectedMedia>
+            </>
           ) : (
             <ProtectedMedia>
-              <img 
-                src={item.type === 'video' ? (item.poster || item.cover || item.url) : item.url} 
+              <img
+                src={item.type === 'video' ? (item.poster || item.cover || item.url) : item.url}
                 alt={item.title}
                 className="w-full max-h-[calc(80vh-120px)] object-contain bg-transparent pointer-events-none"
                 draggable={false}
               />
             </ProtectedMedia>
           )}
+          {isGallery && galleryImages.length > 1 && (
+            <>
+              <button
+                onClick={() => goTo(galleryIndex - 1)}
+                disabled={galleryIndex === 0}
+                className="absolute left-3 top-1/3 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-all disabled:opacity-30 disabled:cursor-not-allowed pointer-events-auto z-30"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                onClick={() => goTo(galleryIndex + 1)}
+                disabled={galleryIndex === galleryImages.length - 1}
+                className="absolute right-3 top-1/3 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-all disabled:opacity-30 disabled:cursor-not-allowed pointer-events-auto z-30"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>
+          )}
         </div>
-        
+
+        {isGallery && galleryImages.length > 1 && (
+          <div className="w-full mb-4 flex-shrink-0">
+            <div className="flex gap-2 overflow-x-auto pb-2 justify-center pointer-events-auto">
+              {galleryImages.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className={`flex-shrink-0 w-14 h-10 rounded overflow-hidden border-2 transition-all ${
+                    i === galleryIndex ? 'border-gold opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
+                  }`}
+                >
+                  <img src={img} alt="" className="w-full h-full object-cover" draggable={false} />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="text-center max-w-2xl px-4 flex-shrink-0 mt-auto">
            <h3 className="font-serif text-2xl md:text-3xl text-primary mb-3">{item.title}</h3>
            <p className="text-muted font-light leading-relaxed mb-4">{item.description}</p>
-           <div className="flex items-center justify-center gap-4 mt-2">
+           <div className="flex items-center justify-center gap-4 mt-2 flex-wrap">
              <span className="font-mono text-sm tracking-widest text-gold border border-gold/30 rounded-full px-4 py-1">
                {item.date}
              </span>
+             {isGallery && (
+               <span className="font-mono text-sm tracking-widest text-gold/70 border border-gold/20 rounded-full px-4 py-1">
+                 {galleryIndex + 1} / {galleryImages.length}
+               </span>
+             )}
              {item.type === 'video' && (
                <a
                  href={item.url}
