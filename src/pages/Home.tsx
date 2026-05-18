@@ -20,7 +20,7 @@ export function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-gold)_0%,transparent_70%)] opacity-[0.08] pointer-events-none"></div>
           
           <div className="inline-block border border-gold/30 rounded-full px-4 py-1.5 mb-8 text-gold text-xs font-mono uppercase tracking-widest bg-gold/5">
-            1980 - {new Date().getFullYear()}
+            ? - {new Date().getFullYear()}
           </div>
           
           <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-light text-primary mb-8 leading-tight tracking-wide">
