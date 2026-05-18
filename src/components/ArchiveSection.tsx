@@ -28,7 +28,7 @@ export function ArchiveSection({ items, title, viewMoreLink, onItemClick }: Arch
             className="group flex flex-col cursor-pointer"
             onClick={() => onItemClick?.(item)}
           >
-            <div className="aspect-[4/3] bg-surface rounded-2xl overflow-hidden mb-6 filter grayscale group-hover:grayscale-0 transition-all duration-700 pointer-events-none md:pointer-events-auto relative">
+            <div className="aspect-[4/3] bg-surface rounded-2xl overflow-hidden mb-6 transition-all duration-700 pointer-events-none md:pointer-events-auto relative">
                <ProtectedMedia>
                  {item.type === 'video' ? (
                    <>
