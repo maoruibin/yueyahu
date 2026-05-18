@@ -30,20 +30,28 @@
 ```typescript
 {
   id: 'vis-new-1',               // 必填：必须是唯一的标识符 (建议使用 前缀-序号 的方式)
-  type: 'visual',                // 必填：档案分类，可选值 ['document', 'visual', 'audio', 'video']
-                                 // - document: 文献印鉴 (如合同、通知单)
+  type: 'visual',                // 必填：档案分类，可选值 ['document', 'visual', 'video']
+                                 // - document: 文献印鉴 (如合同、通知单、地契等，支持 PDF)
                                  // - visual: 光影纪实 (旧照片)
-                                 // - audio: 乡音留声 (录音)
                                  // - video: 影像 (航拍或老视频)
   title: '1990年全村大合照',        // 必填：展示的标题
   description: '文字描述，记录背后的故事...', // 必填：详情描述
   date: '1990',                  // 必填：年份或具体日期
-  url: 'https://你的云存储域名.com/image.jpg', // 必填：在上一步获取的云存储真实链接
-  poster: 'https://...'          // 选填：如果是 video 视频类型，可以在这里放一张封面的图片链接
+  url: 'https://你的云盘.com/file.jpg', // 必填：媒体直链 (图片、视频或 PDF 的地址)
+  cover: 'https://你的云盘.com/cover.jpg', // 选填：用于 PDF 的预览封面图或列表页封面
+  poster: 'https://预留字段.com/poster.jpg' // 选填：如果是 video 视频类型，视频封面
 }
 ```
 
-每次您向数组中添加新的对象后，只需要将代码推送到 GitHub，Cloudflare Pages 就会自动触发重新构建，新添加的档案就会展示在网站上。
+每次您向数组中添加、修改或删除记录后，只需要将代码推送到 GitHub，Cloudflare 就会自动触发重新构建，新的档案就会展示在网站上。
+
+## 📥 资料收集与联系方式
+
+如果乡亲们或其他访问者有老照片、旧文件等历史资料想要提供，可以通过本网站底部留下的 **飞书表单** 进行提交：
+- **飞书表单地址**：[资料收集表单](https://my.feishu.cn/share/base/form/shrcnEjmKVCgQvdK09PMxrNXt6J)
+- **邮箱联系**：您也可以通过邮件 (gudong.name@gmail.com) 接收他们发送的内容。
+
+收集到内容后，您可以将资料整理好、上传到您的云存储（图床），然后再按照上述步骤在 `archive.ts` 中新增一条记录。
 
 ---
 

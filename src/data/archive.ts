@@ -6,6 +6,7 @@ export interface ArchiveItem {
   date: string;
   url: string;
   poster?: string;
+  cover?: string;
 }
 
 export const archiveData: ArchiveItem[] = [

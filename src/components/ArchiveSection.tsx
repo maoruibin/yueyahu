@@ -32,16 +32,32 @@ export function ArchiveSection({ items, title, viewMoreLink, onItemClick }: Arch
                <ProtectedMedia>
                  {item.type === 'video' ? (
                    <>
-                     <img src={item.poster || item.url} alt={item.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-105 transform" draggable={false} />
+                     <img src={item.poster || item.cover || item.url} alt={item.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-105 transform" draggable={false} />
                      <div className="absolute inset-0 flex items-center justify-center">
                         <div className="w-14 h-14 bg-black/60 border border-gold/50 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:bg-gold group-hover:border-transparent transition-all duration-500">
                           <Play className="text-gold group-hover:text-black fill-current ml-1 transition-colors" size={24} />
                         </div>
                      </div>
                    </>
+                 ) : item.url.toLowerCase().split('?')[0].endsWith('.pdf') ? (
+                   <>
+                     {item.cover || item.poster ? (
+                       <img 
+                         src={item.cover || item.poster} 
+                         alt={item.title}
+                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-105 transform"
+                         draggable={false}
+                       />
+                     ) : (
+                       <div className="w-full h-full flex flex-col items-center justify-center bg-surface-hover/30 border border-subtle/50 text-gold/70 font-serif gap-2 group-hover:text-gold transition-colors">
+                         <span className="text-xs uppercase tracking-widest border border-gold/30 rounded px-2 py-0.5">PDF</span>
+                         <span className="text-sm">文档卷宗</span>
+                       </div>
+                     )}
+                   </>
                  ) : (
                    <img 
-                     src={item.url} 
+                     src={item.cover || item.url} 
                      alt={item.title}
                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-105 transform"
                      draggable={false}
