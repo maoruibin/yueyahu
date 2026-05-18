@@ -18,7 +18,7 @@ export const archiveData: ArchiveItem[] = [
     type: 'document',
     title: '老式土地证',
     description: '陈文德家的老式土地证，记录着土地改革时期分田到户的历史印记。',
-    date: '1950s',
+    date: '年代不详',
     url: `${BASE_URL}/document/老式土地证-陈文德.jpg`,
     cover: `${BASE_URL}/document/老式土地证-陈文德.jpg`,
   },
