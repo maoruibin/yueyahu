@@ -90,21 +90,5 @@ export const archiveData: ArchiveItem[] = [
     date: '2022',
     url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     poster: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1000&auto=format&fit=crop'
-  },
-  {
-    id: 'aud-1',
-    type: 'audio',
-    title: '五社老村长的回忆录',
-    description: '"那时候天还没亮就要下地..." 原滋原味的永昌乡音，讲述七十年代的开荒史。',
-    date: '2022',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-  },
-  {
-    id: 'aud-2',
-    type: 'audio',
-    title: '社火表演现场录音',
-    description: '正月十五的社火，锣鼓喧天。即便你远在北上广，也能听见故乡的年味。',
-    date: '2019',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
   }
 ];

@@ -10,7 +10,6 @@ const TABS = [
   { id: 'all', label: '全部卷宗' },
   { id: 'visuals', label: '光影纪实' },
   { id: 'documents', label: '文献印鉴' },
-  { id: 'audios', label: '乡音留声' },
 ];
 
 export function Gallery() {

@@ -15,7 +15,7 @@ export function FeishuForm() {
         </p>
         
         <a 
-          href="https://feishu.cn/" // Replace with actual Feishu form link later
+          href="https://my.feishu.cn/share/base/form/shrcnEjmKVCgQvdK09PMxrNXt6J"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary text-base font-medium hover:bg-gold transition-all duration-300 group shadow-md"
