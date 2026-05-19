@@ -1,6 +1,6 @@
 export interface ArchiveItem {
   id: string;
-  type: 'document' | 'visual' | 'audio' | 'video';
+  type: 'document' | 'visual' | 'audio' | 'video' | 'scenery';
   title: string;
   description: string;
   date: string;
@@ -153,4 +153,40 @@ export const archiveData: ArchiveItem[] = [
       `${BASE_URL}/visual/2012年/站在山顶，脚踩石头.jpg`,
     ],
   },
+  {
+    id: 'scenery-1',
+    type: 'scenery',
+    title: '麦田丰收',
+    date: '月牙湖社',
+    description: '春夏秋冬，岁月轮转。从祁连山下的风，到沟壑间的落日。',
+    url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop',
+    cover: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop',
+  },
+  {
+    id: 'scenery-2',
+    type: 'scenery',
+    title: '旷野长风',
+    date: '村北',
+    description: '春夏秋冬，岁月轮转。从祁连山下的风，到沟壑间的落日。',
+    url: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2000&auto=format&fit=crop',
+    cover: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2000&auto=format&fit=crop',
+  },
+  {
+    id: 'scenery-3',
+    type: 'scenery',
+    title: '静谧乡间',
+    date: '黑山子',
+    description: '春夏秋冬，岁月轮转。从祁连山下的风，到沟壑间的落日。',
+    url: 'https://images.unsplash.com/photo-1544669866-9ab5c8fc2cf3?q=80&w=2000&auto=format&fit=crop',
+    cover: 'https://images.unsplash.com/photo-1544669866-9ab5c8fc2cf3?q=80&w=2000&auto=format&fit=crop',
+  },
+  {
+    id: 'scenery-4',
+    type: 'scenery',
+    title: '林影斑驳',
+    date: '老榆树林',
+    description: '春夏秋冬，岁月轮转。从祁连山下的风，到沟壑间的落日。',
+    url: 'https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?q=80&w=2000&auto=format&fit=crop',
+    cover: 'https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?q=80&w=2000&auto=format&fit=crop',
+  }
 ];

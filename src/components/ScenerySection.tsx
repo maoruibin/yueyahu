@@ -3,40 +3,14 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef, useState } from 'react';
 import { ArchiveViewer } from './ArchiveViewer';
-import { ArchiveItem } from '../data/archive';
-
-// Some placeholder images for rural sceneries
-export const sceneryData = [
-  {
-    id: 'scenery-1',
-    title: '麦田丰收',
-    location: '月牙湖社',
-    url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop',
-  },
-  {
-    id: 'scenery-2',
-    title: '旷野长风',
-    location: '村北',
-    url: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2000&auto=format&fit=crop',
-  },
-  {
-    id: 'scenery-3',
-    title: '静谧乡间',
-    location: '黑山子',
-    url: 'https://images.unsplash.com/photo-1544669866-9ab5c8fc2cf3?q=80&w=2000&auto=format&fit=crop',
-  },
-  {
-    id: 'scenery-4',
-    title: '林影斑驳',
-    location: '老榆树林',
-    url: 'https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?q=80&w=2000&auto=format&fit=crop',
-  }
-];
+import { ArchiveItem, archiveData } from '../data/archive';
 
 export function ScenerySection({ viewMoreLink }: { viewMoreLink?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [viewingItem, setViewingItem] = useState<ArchiveItem | null>(null);
   
+  const sceneries = archiveData.filter(i => i.type === 'scenery');
+
   // Create a scroll-based horizontal translation effect
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -65,22 +39,14 @@ export function ScenerySection({ viewMoreLink }: { viewMoreLink?: string }) {
            style={{ x }}
            className="flex gap-6 absolute left-0 h-full pl-[60px] md:pl-[120px] items-center"
          >
-           {sceneryData.map((item, index) => (
+           {sceneries.map((item, index) => (
              <button 
                key={item.id}
-               onClick={() => setViewingItem({
-                 id: item.id,
-                 type: 'visual',
-                 title: item.title,
-                 date: item.location,
-                 description: '',
-                 url: item.url,
-                 cover: item.url
-               })}
+               onClick={() => setViewingItem(item)}
                className={`relative text-left outline-none focus:ring-2 focus:ring-gold flex-shrink-0 cursor-pointer rounded-2xl overflow-hidden group w-[65vw] sm:w-[50vw] md:w-[35vw] lg:w-[30vw] max-w-2xl transition-all duration-700 ${index % 2 !== 0 ? 'h-[75%] mt-12' : 'h-[90%]'}`}
              >
                <img 
-                 src={item.url} 
+                 src={item.cover || item.url} 
                  alt={item.title}
                  className="w-full h-full object-cover filter grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000 scale-100 group-hover:scale-105"
                  draggable={false}
@@ -89,7 +55,7 @@ export function ScenerySection({ viewMoreLink }: { viewMoreLink?: string }) {
                <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                  <div className="text-gold uppercase tracking-widest text-xs font-mono mb-3 flex items-center gap-2 opacity-90">
                    <MapPin size={14} />
-                   <span>{item.location}</span>
+                   <span>{item.date}</span>
                  </div>
                  <h3 className="text-white font-serif text-2xl md:text-3xl font-light tracking-wide">{item.title}</h3>
                </div>
