@@ -92,7 +92,7 @@ export function ArchiveSection({ items, title, viewMoreLink, onItemClick }: Arch
             to={viewMoreLink} 
             className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-subtle bg-surface/50 text-muted hover:text-gold hover:border-gold/50 transition-all duration-300 group"
           >
-            <span className="font-serif tracking-widest text-sm">查阅完整卷宗</span>
+            <span className="font-serif tracking-widest text-sm">查看全部</span>
             <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform" />
           </Link>
         </div>

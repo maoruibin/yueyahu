@@ -14,7 +14,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </Link>
         <div className="flex items-center gap-6">
           <Link to="/archive" className="text-sm font-serif text-muted hover:text-primary transition-colors">
-            全宗档案
+            时光印记
           </Link>
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}

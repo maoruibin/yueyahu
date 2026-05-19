@@ -7,7 +7,7 @@ import { CustomAudioPlayer } from '../components/CustomAudioPlayer';
 import { ArchiveViewer } from '../components/ArchiveViewer';
 
 const TABS = [
-  { id: 'all', label: '全部卷宗' },
+  { id: 'all', label: '岁月全貌' },
   { id: 'visuals', label: '光影纪实' },
   { id: 'sceneries', label: '乡村景色' },
   { id: 'documents', label: '文献印鉴' },
@@ -36,7 +36,7 @@ export function Gallery() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
         
         <div className="mb-16">
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-primary mb-8">全宗档案库</h1>
+          <h1 className="font-serif text-4xl md:text-5xl font-light text-primary mb-8">时光印记</h1>
           <p className="text-muted font-light max-w-2xl leading-relaxed mb-12">
             这里收录了月牙湖村五社、六社的所有数字化资料。为了保护隐私与版权，所有资料仅限在线预览。
           </p>
