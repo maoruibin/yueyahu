@@ -13,6 +13,9 @@ export function Layout({ children }: { children: ReactNode }) {
           数字月牙湖
         </Link>
         <div className="flex items-center gap-6">
+          <Link to="/about" className="text-sm font-serif text-muted hover:text-primary transition-colors">
+            关于月牙湖
+          </Link>
           <Link to="/archive" className="text-sm font-serif text-muted hover:text-primary transition-colors">
             时光印记
           </Link>

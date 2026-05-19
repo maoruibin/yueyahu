@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ExternalLink, ChevronLeft, ChevronRight, Info, Download } from 'lucide-react';
 import { ArchiveItem } from '../data/archive';
 import { ProtectedMedia } from './ProtectedMedia';
 // @ts-ignore
@@ -20,29 +20,47 @@ function extractImageName(url: string, mainTitle: string) {
   }
 }
 
-export function ArchiveViewer({ item, onClose }: { item: ArchiveItem | null, onClose: () => void }) {
+export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { items: ArchiveItem[], initialIndex: number | null, onClose: () => void }) {
+  const [itemIndex, setItemIndex] = useState<number>(0);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
-    setGalleryIndex(0);
-    setDirection(0);
-  }, [item?.id]);
+    if (initialIndex !== null) {
+      setItemIndex(initialIndex);
+      setGalleryIndex(0);
+      setDirection(0);
+      setShowInfo(false);
+    }
+  }, [initialIndex]);
 
+  if (initialIndex === null) return null;
+
+  const item = items[itemIndex];
   if (!item) return null;
 
   const isPdf = item.url.toLowerCase().split('?')[0].endsWith('.pdf');
   const isGallery = item.gallery && item.gallery.length > 0;
-  const galleryImages = isGallery ? item.gallery! : [];
+  const galleryImages = isGallery ? item.gallery! : [item.type === 'video' ? (item.poster || item.cover || item.url) : item.url];
 
   const paginate = (newDirection: number) => {
     setDirection(newDirection);
-    setGalleryIndex((prevIndex) => {
-      let nextIndex = prevIndex + newDirection;
-      if (nextIndex < 0) nextIndex = galleryImages.length - 1;
-      if (nextIndex >= galleryImages.length) nextIndex = 0;
-      return nextIndex;
-    });
+    
+    const nextGalleryIndex = galleryIndex + newDirection;
+    
+    // Within current item's gallery
+    if (isGallery && nextGalleryIndex >= 0 && nextGalleryIndex < galleryImages.length) {
+      setGalleryIndex(nextGalleryIndex);
+    } else {
+      // Switch items
+      const nextItemIndex = (itemIndex + newDirection + items.length) % items.length;
+      const nextItem = items[nextItemIndex];
+      const nextGalleryLength = nextItem.gallery?.length || 1;
+      
+      setItemIndex(nextItemIndex);
+      setGalleryIndex(newDirection > 0 ? 0 : nextGalleryLength - 1);
+    }
   };
 
   const jumpTo = (index: number) => {
@@ -54,9 +72,9 @@ export function ArchiveViewer({ item, onClose }: { item: ArchiveItem | null, onC
 
   const variants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
+      x: direction > 0 ? '100%' : '-100%',
       opacity: 0,
-      scale: 0.95,
+      scale: 0.9,
     }),
     center: {
       zIndex: 1,
@@ -66,10 +84,15 @@ export function ArchiveViewer({ item, onClose }: { item: ArchiveItem | null, onC
     },
     exit: (direction: number) => ({
       zIndex: 0,
-      x: direction < 0 ? 300 : -300,
+      x: direction < 0 ? '100%' : '-100%',
       opacity: 0,
-      scale: 0.95,
+      scale: 0.9,
     }),
+  };
+
+  const swipeConfidenceThreshold = 500;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
   };
 
   const currentImageUrl = isGallery ? galleryImages[galleryIndex] : 
@@ -81,174 +104,216 @@ export function ArchiveViewer({ item, onClose }: { item: ArchiveItem | null, onC
   const showImageName = isGallery && currentImageName && currentImageName !== item.title;
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-black/95 backdrop-blur-2xl transition-colors font-sans">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-black transition-colors font-sans overflow-hidden">
       
-      {/* Header Bar */}
-      <div className="absolute top-0 inset-x-0 h-24 flex items-center justify-between px-6 md:px-12 z-50 bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
-        <div className="pointer-events-auto max-w-[70vw]">
-          <h2 className="text-white/90 text-lg md:text-2xl font-serif tracking-wide truncate">{item.title}</h2>
-          <div className="text-gold/80 text-sm font-mono mt-1 tracking-wider">{item.date}</div>
+      {/* Header Bar - Minimized */}
+      <div className="absolute top-0 inset-x-0 h-20 flex items-center justify-between px-6 md:px-12 z-[60] bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
+        <div className="pointer-events-auto">
+          <h2 className="text-white/60 text-xs md:text-sm font-serif tracking-widest uppercase opacity-40 select-none">
+            {item.title}
+          </h2>
         </div>
-        <button
-          onClick={() => { resetIndex(); onClose(); }}
-          className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-all pointer-events-auto backdrop-blur-md"
-        >
-          <X size={24} strokeWidth={1.5} />
-        </button>
+        
+        <div className="flex items-center gap-3 pointer-events-auto">
+          <button
+            onClick={() => setShowInfo(!showInfo)}
+            className={`w-10 h-10 flex items-center justify-center rounded-full transition-all backdrop-blur-md border ${
+              showInfo ? 'bg-gold text-white border-gold' : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+            }`}
+            title="查看卷宗详情"
+          >
+            <Info size={20} strokeWidth={1.5} />
+          </button>
+          
+          <button
+            onClick={() => { resetIndex(); onClose(); }}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all backdrop-blur-md border border-white/10"
+          >
+            <X size={20} strokeWidth={1.5} />
+          </button>
+        </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 relative flex items-center justify-center w-full h-full overflow-hidden mt-12 md:mt-0">
+      {/* Info Popover Overlay */}
+      <AnimatePresence>
+        {showInfo && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            className="absolute bottom-24 left-6 right-6 md:left-12 md:right-auto md:w-96 z-[70] bg-zinc-900/90 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-2xl"
+          >
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-gold font-serif text-xl leading-tight">{item.title}</h3>
+                <div className="text-white/40 text-xs font-mono mt-1">{item.date}</div>
+              </div>
+              <button 
+                onClick={() => setShowInfo(false)}
+                className="text-white/20 hover:text-white transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            
+            <div className="max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+              <p className="text-white/80 text-sm leading-relaxed font-light whitespace-pre-wrap">
+                {item.description}
+              </p>
+            </div>
+
+            {isGallery && item.imageNames && (
+              <div className="mt-4 pt-4 border-t border-white/5">
+                <span className="text-white/40 text-[10px] uppercase tracking-widest block mb-1">当前子卷</span>
+                <span className="text-white text-sm font-medium">{currentImageName}</span>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content Area - Maximized */}
+      <div className="flex-1 relative flex items-center justify-center w-full h-full">
         
-        {/* Left/Right Navigation Areas (Invisible overlay for easy clicking) */}
-        {isGallery && galleryImages.length > 1 && (
+        {/* Navigation - Minimal and Functional */}
+        {((isGallery && galleryImages.length > 1) || items.length > 1) && (
           <>
             <button 
               onClick={() => paginate(-1)} 
-              className="absolute left-0 inset-y-0 w-1/6 md:w-32 z-40 flex items-center justify-start px-4 md:px-8 group cursor-w-resize"
+              className="absolute left-0 inset-y-0 w-16 md:w-32 z-40 flex items-center justify-center group cursor-w-resize"
             >
-              <div className="w-14 h-14 rounded-full flex items-center justify-center bg-black/0 group-hover:bg-black/40 text-white/0 group-hover:text-white transition-all backdrop-blur-none group-hover:backdrop-blur-md">
-                <ChevronLeft size={36} strokeWidth={1} />
+              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white/5 text-white/0 group-hover:text-white/20 transition-all">
+                <ChevronLeft size={32} strokeWidth={1} />
               </div>
             </button>
             <button 
               onClick={() => paginate(1)} 
-              className="absolute right-0 inset-y-0 w-1/6 md:w-32 z-40 flex items-center justify-end px-4 md:px-8 group cursor-e-resize"
+              className="absolute right-0 inset-y-0 w-16 md:w-32 z-40 flex items-center justify-center group cursor-e-resize"
             >
-              <div className="w-14 h-14 rounded-full flex items-center justify-center bg-black/0 group-hover:bg-black/40 text-white/0 group-hover:text-white transition-all backdrop-blur-none group-hover:backdrop-blur-md">
-                <ChevronRight size={36} strokeWidth={1} />
+              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white/5 text-white/0 group-hover:text-white/20 transition-all">
+                <ChevronRight size={32} strokeWidth={1} />
               </div>
             </button>
           </>
         )}
 
-        {/* Media Container */}
-        <div className="w-full h-full p-4 md:p-20 relative flex items-center justify-center">
+        {/* Media Container - Reduced padding significantly */}
+        <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
           {isPdf ? (
-            <div className="flex flex-col items-center justify-center w-full max-w-2xl bg-surface/10 p-12 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm pointer-events-auto z-30">
+            <div className="flex flex-col items-center justify-center w-full max-w-2xl bg-zinc-900/50 p-12 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm pointer-events-auto z-30 m-6">
               {(item.cover || item.poster) && (
-                <img src={item.cover || item.poster} alt={item.title} className="max-h-[50vh] object-contain mb-8 shadow-2xl rounded-sm" />
+                <img src={item.cover || item.poster} alt={item.title} className="max-h-[40vh] object-contain mb-8 shadow-2xl rounded-sm" />
               )}
+              <h3 className="text-white text-xl font-serif mb-8 text-center">{item.title}</h3>
               <a
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gold text-black text-lg font-medium hover:bg-white hover:scale-105 transition-all shadow-xl"
+                className="px-10 py-4 bg-gold text-black font-medium rounded-full hover:scale-105 transition-transform flex items-center gap-3 shadow-[0_0_30px_rgba(212,175,55,0.3)]"
               >
-                <span>查阅完整文献 (PDF)</span>
-                <ExternalLink size={24} />
+                <Download size={20} />
+                <span>下载/查阅完整文献</span>
               </a>
             </div>
-          ) : isGallery ? (
-            <AnimatePresence initial={false} custom={direction}>
+          ) : (
+            <AnimatePresence initial={false} custom={direction} mode="popLayout">
               <motion.div
-                key={galleryIndex}
+                key={`${itemIndex}-${galleryIndex}`}
                 custom={direction}
                 variants={variants}
                 initial="enter"
                 animate="center"
                 exit="exit"
                 transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  x: { type: "spring", stiffness: 300, damping: 35 },
                   opacity: { duration: 0.2 },
-                  scale: { duration: 0.2 }
+                  scale: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
                 }}
-                className="absolute inset-x-8 inset-y-24 md:inset-x-24 md:inset-y-24 flex justify-center items-center pointer-events-none"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={(e, { offset, velocity }) => {
+                  const swipe = swipePower(offset.x, velocity.x);
+                  if (swipe < -swipeConfidenceThreshold || offset.x < -50) {
+                    paginate(1);
+                  } else if (swipe > swipeConfidenceThreshold || offset.x > 50) {
+                    paginate(-1);
+                  }
+                }}
+                className="absolute inset-0 flex justify-center items-center p-2 md:p-10 z-30"
               >
                 <ProtectedMedia>
                   <img
                     src={galleryImages[galleryIndex]}
-                    alt={`${item.title} - ${galleryIndex + 1}`}
-                    className="max-w-full max-h-full object-contain pointer-events-auto rounded-sm shadow-2xl"
+                    alt={`${item.title} - ${isGallery ? galleryIndex + 1 : '1'}`}
+                    className="max-w-full max-h-[95vh] object-contain shadow-2xl rounded-sm select-none"
                     draggable={false}
                   />
                 </ProtectedMedia>
               </motion.div>
             </AnimatePresence>
-          ) : (
-             <motion.div
-               initial={{ opacity: 0, scale: 0.95 }}
-               animate={{ opacity: 1, scale: 1 }}
-               transition={{ duration: 0.5, ease: "easeOut" }}
-               className="absolute inset-x-8 inset-y-24 md:inset-x-24 md:inset-y-24 flex justify-center items-center pointer-events-none"
-             >
-              <ProtectedMedia>
-                <img
-                  src={item.type === 'video' ? (item.poster || item.cover || item.url) : item.url}
-                  alt={item.title}
-                  className="max-w-full max-h-full object-contain pointer-events-auto shadow-2xl rounded-sm"
-                  draggable={false}
-                />
-              </ProtectedMedia>
-             </motion.div>
           )}
         </div>
       </div>
 
-      {/* Footer Area - Adaptive layout based on gallery or single */}
-      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-24 pb-6 md:pb-8 px-6 md:px-12 z-50 pointer-events-none flex flex-col items-center">
+      {/* Footer Area - Adaptive and Minimal */}
+      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-24 pb-4 px-6 md:px-12 z-50 flex flex-col items-center">
         
-        {/* Caption & Description Area */}
-        <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-end justify-between gap-6 md:gap-12 pointer-events-auto">
+        <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           
-          <div className="flex-1 max-w-2xl">
-            {showImageName && (
-              <motion.div 
-                key={currentImageName}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-white text-lg md:text-xl font-medium mb-3 flex items-center gap-3 drop-shadow-lg"
-              >
-                <span className="w-1 h-4 bg-gold rounded-full"></span>
-                {currentImageName}
-              </motion.div>
-            )}
-            {item.description && (
-              <p className="text-white/70 text-sm md:text-base font-light leading-relaxed drop-shadow-md">
-                {item.description}
-              </p>
-            )}
+          {/* Item Name - Bottom Center on Mobile, Left on Desktop */}
+          <div className="flex-1 order-2 md:order-1 text-center md:text-left">
+            <motion.div 
+              key={currentImageName || item.title}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-white text-base md:text-xl font-medium drop-shadow-2xl"
+            >
+              {currentImageName || item.title}
+            </motion.div>
             
             {item.type === 'video' && (
-               <div className="mt-4">
+              <div className="mt-2 flex justify-center md:justify-start">
                  <a
                    href={item.url}
                    target="_blank"
                    rel="noopener noreferrer"
-                   className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-gold/90 text-black font-medium hover:bg-gold transition-all"
+                   className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/80 text-black text-xs font-medium hover:bg-gold transition-all"
                  >
                    <span>观看外链影像</span>
-                   <ExternalLink size={16} />
+                   <ExternalLink size={14} />
                  </a>
-               </div>
-             )}
+              </div>
+            )}
           </div>
 
-          {/* Thumbnails Navigation (Desktop focused, horizontal scroll mobile) */}
+          {/* Thumbnails & Counter - Right side */}
           {isGallery && galleryImages.length > 1 && (
-            <div className="w-full md:w-auto flex flex-col items-center md:items-end flex-shrink-0">
-              <div className="text-gold/80 font-mono text-sm tracking-widest mb-3">
-                {galleryIndex + 1} / {galleryImages.length}
-              </div>
-              <div className="flex gap-2 max-w-[80vw] md:max-w-md overflow-x-auto py-2 hide-scrollbar mask-edges-horizontal">
+            <div className="w-full md:w-auto flex items-center justify-center md:justify-end order-1 md:order-2">
+              <div className="flex gap-2 max-w-[85vw] md:max-w-md overflow-x-auto py-1.5 px-1 hide-scrollbar scroll-smooth">
                 {galleryImages.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => jumpTo(i)}
-                    className={`relative flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-md overflow-hidden transition-all duration-300 ${
-                      i === galleryIndex ? 'ring-2 ring-gold scale-100 opacity-100 shadow-xl' : 'opacity-40 hover:opacity-100 scale-95 hover:scale-100'
+                    className={`relative flex-shrink-0 w-8 h-8 md:w-12 md:h-12 rounded overflow-hidden transition-all duration-300 border ${
+                      i === galleryIndex 
+                        ? 'border-gold ring-1 ring-gold scale-110 opacity-100 z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)]' 
+                        : 'border-white/5 opacity-25 hover:opacity-100 grayscale hover:grayscale-0'
                     }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" draggable={false} />
                   </button>
                 ))}
               </div>
+              
+              {/* Counter */}
+              <div className="ml-4 bg-white/5 px-2.5 py-1 rounded border border-white/5 text-white/40 font-mono text-[10px] tracking-tighter flex-shrink-0">
+                {galleryIndex + 1} <span className="opacity-20 font-sans mx-1">/</span> {galleryImages.length}
+              </div>
             </div>
           )}
-
         </div>
       </div>
-      
     </div>
   );
 }

@@ -17,7 +17,13 @@ export function Home() {
   
   const audios = archiveData.filter(item => item.type === 'audio').slice(0, 2);
 
-  const [viewingItem, setViewingItem] = useState<ArchiveItem | null>(null);
+  const [viewingIndex, setViewingIndex] = useState<number | null>(null);
+  const [viewingList, setViewingList] = useState<ArchiveItem[]>([]);
+
+  const handleOpenViewer = (list: ArchiveItem[], index: number) => {
+    setViewingList(list);
+    setViewingIndex(index);
+  };
 
   return (
     <Layout>
@@ -46,7 +52,7 @@ export function Home() {
             title="光影纪实" 
             items={visuals} 
             viewMoreLink="/archive?tab=visuals" 
-            onItemClick={(item) => setViewingItem(item)}
+            onItemClick={(_, index) => handleOpenViewer(visuals, index)}
           />
         )}
 
@@ -57,7 +63,7 @@ export function Home() {
             title="文献印鉴" 
             items={documents} 
             viewMoreLink="/archive?tab=documents" 
-            onItemClick={(item) => setViewingItem(item)}
+            onItemClick={(_, index) => handleOpenViewer(documents, index)}
           />
         )}
 
@@ -80,7 +86,11 @@ export function Home() {
         <FeishuForm />
       </div>
       
-      <ArchiveViewer item={viewingItem} onClose={() => setViewingItem(null)} />
+      <ArchiveViewer 
+        items={viewingList} 
+        initialIndex={viewingIndex} 
+        onClose={() => setViewingIndex(null)} 
+      />
     </Layout>
   );
 }

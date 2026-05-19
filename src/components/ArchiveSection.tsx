@@ -7,7 +7,7 @@ interface ArchiveSectionProps {
   items: ArchiveItem[];
   title: string;
   viewMoreLink?: string;
-  onItemClick?: (item: ArchiveItem) => void;
+  onItemClick?: (item: ArchiveItem, index: number) => void;
 }
 
 export function ArchiveSection({ items, title, viewMoreLink, onItemClick }: ArchiveSectionProps) {
@@ -22,11 +22,11 @@ export function ArchiveSection({ items, title, viewMoreLink, onItemClick }: Arch
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <div 
             key={item.id} 
             className="group flex flex-col cursor-pointer"
-            onClick={() => onItemClick?.(item)}
+            onClick={() => onItemClick?.(item, index)}
           >
             <div className="aspect-[4/3] bg-surface rounded-2xl overflow-hidden mb-6 transition-all duration-700 pointer-events-none md:pointer-events-auto relative">
                <ProtectedMedia>

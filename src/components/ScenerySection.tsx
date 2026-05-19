@@ -7,7 +7,7 @@ import { ArchiveItem, archiveData } from '../data/archive';
 
 export function ScenerySection({ viewMoreLink }: { viewMoreLink?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [viewingItem, setViewingItem] = useState<ArchiveItem | null>(null);
+  const [viewingIndex, setViewingIndex] = useState<number | null>(null);
   
   const sceneries = archiveData.filter(i => i.type === 'scenery');
 
@@ -42,7 +42,7 @@ export function ScenerySection({ viewMoreLink }: { viewMoreLink?: string }) {
            {sceneries.map((item, index) => (
              <button 
                key={item.id}
-               onClick={() => setViewingItem(item)}
+               onClick={() => setViewingIndex(index)}
                className={`relative text-left outline-none focus:ring-2 focus:ring-gold flex-shrink-0 cursor-pointer rounded-2xl overflow-hidden group w-[65vw] sm:w-[50vw] md:w-[35vw] lg:w-[30vw] max-w-2xl transition-all duration-700 ${index % 2 !== 0 ? 'h-[75%] mt-12' : 'h-[90%]'}`}
              >
                <img 
@@ -82,9 +82,11 @@ export function ScenerySection({ viewMoreLink }: { viewMoreLink?: string }) {
         </div>
       )}
 
-      {viewingItem && (
-        <ArchiveViewer item={viewingItem} onClose={() => setViewingItem(null)} />
-      )}
+      <ArchiveViewer 
+        items={sceneries} 
+        initialIndex={viewingIndex} 
+        onClose={() => setViewingIndex(null)} 
+      />
     </section>
   );
 }

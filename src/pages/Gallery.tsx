@@ -16,7 +16,7 @@ const TABS = [
 export function Gallery() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'all';
-  const [viewingItem, setViewingItem] = useState<ArchiveItem | null>(null);
+  const [viewingIndex, setViewingIndex] = useState<number | null>(null);
 
   const filteredItems = useMemo(() => {
     if (activeTab === 'sceneries') return archiveData.filter(i => i.type === 'scenery');
@@ -64,7 +64,7 @@ export function Gallery() {
             <ArchiveSection 
               title={TABS.find(t => t.id === activeTab)?.label || '卷宗'} 
               items={mediaItems} 
-              onItemClick={(item) => setViewingItem(item)}
+              onItemClick={(_, index) => setViewingIndex(index)}
             />
           </div>
         )}
@@ -88,7 +88,11 @@ export function Gallery() {
           </div>
         )}
         
-        <ArchiveViewer item={viewingItem} onClose={() => setViewingItem(null)} />
+        <ArchiveViewer 
+          items={mediaItems}
+          initialIndex={viewingIndex}
+          onClose={() => setViewingIndex(null)} 
+        />
       </div>
     </Layout>
   );
