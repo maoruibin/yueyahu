@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { archiveData, ArchiveItem } from '../data/archive';
+import { sceneryData } from '../components/ScenerySection';
 import { Layout } from '../components/Layout';
 import { ArchiveSection } from '../components/ArchiveSection';
 import { CustomAudioPlayer } from '../components/CustomAudioPlayer';
@@ -9,6 +10,7 @@ import { ArchiveViewer } from '../components/ArchiveViewer';
 const TABS = [
   { id: 'all', label: '全部卷宗' },
   { id: 'visuals', label: '光影纪实' },
+  { id: 'sceneries', label: '乡村景色' },
   { id: 'documents', label: '文献印鉴' },
 ];
 
@@ -18,9 +20,22 @@ export function Gallery() {
   const [viewingItem, setViewingItem] = useState<ArchiveItem | null>(null);
 
   const filteredItems = useMemo(() => {
+    const sceneriesAsArchiveItems: ArchiveItem[] = sceneryData.map(s => ({
+      id: s.id,
+      type: 'visual',
+      title: s.title,
+      date: s.location,
+      description: '',
+      url: s.url,
+      cover: s.url
+    }));
+
+    if (activeTab === 'sceneries') return sceneriesAsArchiveItems;
     if (activeTab === 'visuals') return archiveData.filter(i => ['visual', 'video'].includes(i.type));
     if (activeTab === 'documents') return archiveData.filter(i => i.type === 'document');
     if (activeTab === 'audios') return archiveData.filter(i => i.type === 'audio');
+    
+    if (activeTab === 'all') return [...archiveData, ...sceneriesAsArchiveItems];
     return archiveData;
   }, [activeTab]);
 

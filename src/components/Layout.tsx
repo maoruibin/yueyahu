@@ -32,15 +32,15 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <footer className="bg-footer border-t border-subtle pt-16 pb-8 px-6 md:px-12 text-center transition-colors duration-300">
         <div className="max-w-4xl mx-auto mb-12 space-y-4">
-          <p className="text-muted text-sm md:text-base leading-relaxed font-serif italic opacity-80 decoration-gold underline-offset-4 pointer-events-auto">
+          <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm leading-relaxed font-serif pt-4">
             “本项目纯属个人兴趣驱动，自费维护，是非官方、非盈利的数字化记录行为。所有展示资料仅供乡情寄托与历史记忆留存，受技术手段保护，请勿通过任何违规方式下载或用于商业用途。”
           </p>
-          <p className="text-muted/70 text-xs md:text-sm leading-relaxed font-serif pt-4">
-            网站中涉及的老照片、印鉴、影像等资料，均为个人自发收集整理。若任何内容侵犯了您的肖像权、隐私权或著作权，请通过 <a href="https://my.feishu.cn/share/base/form/shrcnEjmKVCgQvdK09PMxrNXt6J" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">飞书表单</a> 留言或发送邮件至 <a href="mailto:gudong.name@gmail.com" className="text-gold hover:underline">gudong.name@gmail.com</a> 联系我，我将在核实后第一时间删除处理。
+          <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm leading-relaxed font-serif pt-4">
+            网站中涉及的老照片、印鉴、影像等资料，均为个人自发收集整理。若任何内容侵犯了您的肖像权、隐私权或著作权，请通过 <a href="https://my.feishu.cn/share/base/form/shrcnEjmKVCgQvdK09PMxrNXt6J" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline font-medium">飞书表单</a> 留言或发送邮件至 <a href="mailto:gudong.name@gmail.com" className="text-gold hover:underline font-medium">gudong.name@gmail.com</a> 联系我，我将在核实后第一时间删除处理。
           </p>
         </div>
         
-        <div className="text-xs font-mono text-muted/50 uppercase tracking-widest flex flex-col gap-2">
+        <div className="text-xs font-mono text-gray-500 dark:text-gray-500 uppercase tracking-widest flex flex-col gap-2">
           <span>&copy; {new Date().getFullYear()} 数字月牙湖 (Digital Yueyahu)</span>
           <span>Designed & Handcrafted with Heart</span>
         </div>

@@ -19,7 +19,7 @@ export function ProtectedMedia({ children, isAudio = false }: ProtectedMediaProp
 
   return (
     <div 
-      className="relative group w-full h-full prevent-select"
+      className="relative group w-full h-full flex items-center justify-center prevent-select"
       onContextMenu={handleContextMenu}
       onDragStart={handleDragStart}
     >

@@ -55,32 +55,23 @@ export function ArchiveSection({ items, title, viewMoreLink, onItemClick }: Arch
                        </div>
                      )}
                    </>
-                 ) : item.gallery && item.gallery.length > 1 ? (
-                   <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-0.5">
-                     {item.gallery.slice(0, 4).map((img, i) => (
-                       <img
-                         key={i}
-                         src={img}
-                         alt={`${item.title} - ${i + 1}`}
-                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
-                         draggable={false}
-                       />
-                     ))}
-                   </div>
                  ) : (
                    <img
-                     src={item.cover || item.url}
+                     src={item.cover || (item.gallery && item.gallery.length > 0 ? item.gallery[0] : item.url)}
                      alt={item.title}
                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-105 transform"
                      draggable={false}
                    />
                  )}
                </ProtectedMedia>
-               {item.gallery && item.gallery.length > 0 && (
-                 <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full flex items-center gap-1.5 pointer-events-none">
-                   <Images size={12} />
-                   <span>{item.gallery.length}</span>
-                 </div>
+               {item.gallery && item.gallery.length > 1 && (
+                 <>
+                   <div className="absolute inset-0 ring-1 ring-inset ring-gold/20 rounded-2xl pointer-events-none" />
+                   <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-gold text-xs px-3 py-1.5 rounded-full flex items-center gap-2 pointer-events-none border border-gold/30 shadow-lg">
+                     <Images size={14} />
+                     <span className="font-mono">{item.gallery.length} 枚</span>
+                   </div>
+                 </>
                )}
             </div>
             

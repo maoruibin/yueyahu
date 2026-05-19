@@ -91,3 +91,16 @@ body {
   user-select: none;
   -webkit-touch-callout: none;
 }
+
+@utility hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;    /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;        /* Chrome, Safari and Opera */
+  }
+}
+
+@utility mask-edges-horizontal {
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}

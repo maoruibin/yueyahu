@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { archiveData, ArchiveItem } from '../data/archive';
 import { ArchiveSection } from '../components/ArchiveSection';
+import { ScenerySection } from '../components/ScenerySection';
 import { CustomAudioPlayer } from '../components/CustomAudioPlayer';
 import { FeishuForm } from '../components/FeishuForm';
 import { Layout } from '../components/Layout';
@@ -8,7 +9,12 @@ import { ArchiveViewer } from '../components/ArchiveViewer';
 
 export function Home() {
   const documents = archiveData.filter(item => item.type === 'document').slice(0, 3);
-  const visuals = archiveData.filter(item => ['visual', 'video'].includes(item.type)).slice(0, 3);
+  
+  const allVisuals = archiveData.filter(item => ['visual', 'video'].includes(item.type));
+  const visualGalleries = allVisuals.filter(item => item.gallery && item.gallery.length > 0).slice(0, 2);
+  const visualSingles = allVisuals.filter(item => !item.gallery || item.gallery.length === 0).slice(0, 2);
+  const visuals = [...visualGalleries, ...visualSingles];
+  
   const audios = archiveData.filter(item => item.type === 'audio').slice(0, 2);
 
   const [viewingItem, setViewingItem] = useState<ArchiveItem | null>(null);
@@ -43,6 +49,8 @@ export function Home() {
             onItemClick={(item) => setViewingItem(item)}
           />
         )}
+
+        <ScenerySection viewMoreLink="/archive?tab=sceneries" />
 
         {documents.length > 0 && (
           <ArchiveSection 
