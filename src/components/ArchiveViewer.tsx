@@ -162,7 +162,7 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
               </p>
             </div>
 
-            {isGallery && item.imageNames && (
+            {isGallery && currentImageName && (
               <div className="mt-4 pt-4 border-t border-white/5">
                 <span className="text-white/40 text-[10px] uppercase tracking-widest block mb-1">当前子卷</span>
                 <span className="text-white text-sm font-medium">{currentImageName}</span>

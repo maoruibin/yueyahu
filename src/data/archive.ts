@@ -15,6 +15,15 @@ const BASE_URL = 'https://s3.bitiful.net/gudong/yueyahu';
 export const archiveData: ArchiveItem[] = [
   // 文献印鉴
   {
+    id: 'doc-4',
+    type: 'document',
+    title: '1954年土地证（属毛卜喇乡）',
+    description: '由村民陈廉德保留并提供，清书登记于1952年、颁发于1954年。上载明当时月牙湖（村）地块归属“永昌县二区毛卜喇乡”管辖，是建国初期土地改革及该地区基层行政管辖沿革的极珍贵历史物证。',
+    date: '1954 年',
+    url: 'https://gudong.s3.bitiful.net/yueyahu/document/1952%E5%9C%9F%E5%9C%B0%E8%AF%81.jpg?no-wait=on',
+    cover: 'https://gudong.s3.bitiful.net/yueyahu/document/1952%E5%9C%9F%E5%9C%B0%E8%AF%81.jpg?no-wait=on',
+  },
+  {
     id: 'doc-1',
     type: 'document',
     title: '老式土地证',

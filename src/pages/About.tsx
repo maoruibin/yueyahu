@@ -83,6 +83,22 @@ export function About() {
                     rel="noopener noreferrer" 
                     className="text-gold hover:underline cursor-pointer transition-all underline-offset-4"
                   />
+                ),
+                img: ({ node, ...props }) => (
+                  <div className="my-8 flex flex-col items-center">
+                    <div className="max-w-full md:max-w-2xl overflow-hidden rounded-lg border border-subtle/50 group bg-black/20 p-2 shadow-lg">
+                      <img 
+                        {...props} 
+                        className="max-h-[550px] w-full h-auto object-contain rounded transition-transform duration-550 group-hover:scale-[1.02]"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    {props.alt && (
+                      <span className="mt-3 text-xs text-muted/80 font-serif italic text-center max-w-xl leading-relaxed block px-4 border-l-2 border-gold/30">
+                        {props.alt}
+                      </span>
+                    )}
+                  </div>
                 )
               }}
             >
