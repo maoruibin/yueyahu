@@ -182,15 +182,15 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
               onClick={() => paginate(-1)} 
               className="absolute left-0 inset-y-0 w-16 md:w-32 z-40 flex items-center justify-center group cursor-w-resize"
             >
-              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white/5 text-white/0 group-hover:text-white/20 transition-all">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 text-white/50 group-hover:bg-white/20 group-hover:text-white transition-all">
                 <ChevronLeft size={32} strokeWidth={1} />
               </div>
             </button>
-            <button 
-              onClick={() => paginate(1)} 
+            <button
+              onClick={() => paginate(1)}
               className="absolute right-0 inset-y-0 w-16 md:w-32 z-40 flex items-center justify-center group cursor-e-resize"
             >
-              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white/5 text-white/0 group-hover:text-white/20 transition-all">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 text-white/50 group-hover:bg-white/20 group-hover:text-white transition-all">
                 <ChevronRight size={32} strokeWidth={1} />
               </div>
             </button>

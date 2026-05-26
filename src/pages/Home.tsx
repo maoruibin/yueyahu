@@ -1,20 +1,18 @@
 import { useState } from 'react';
 import { archiveData, ArchiveItem } from '../data/archive';
 import { ArchiveSection } from '../components/ArchiveSection';
-import { ScenerySection } from '../components/ScenerySection';
 import { CustomAudioPlayer } from '../components/CustomAudioPlayer';
 import { FeishuForm } from '../components/FeishuForm';
 import { Layout } from '../components/Layout';
 import { ArchiveViewer } from '../components/ArchiveViewer';
 
 export function Home() {
-  const documents = archiveData.filter(item => item.type === 'document').slice(0, 3);
-  
-  const allVisuals = archiveData.filter(item => ['visual', 'video'].includes(item.type));
-  const visualGalleries = allVisuals.filter(item => item.gallery && item.gallery.length > 0).slice(0, 2);
-  const visualSingles = allVisuals.filter(item => !item.gallery || item.gallery.length === 0).slice(0, 2);
-  const visuals = [...visualGalleries, ...visualSingles];
-  
+  const documents = archiveData.filter(item => item.type === 'document').slice(0, 6);
+
+  const visuals = archiveData.filter(item => ['visual', 'video'].includes(item.type)).slice(0, 6);
+
+  const sceneries = archiveData.filter(item => item.type === 'scenery').slice(0, 6);
+
   const audios = archiveData.filter(item => item.type === 'audio').slice(0, 2);
 
   const [viewingIndex, setViewingIndex] = useState<number | null>(null);
@@ -48,15 +46,22 @@ export function Home() {
         </section>
 
         {visuals.length > 0 && (
-          <ArchiveSection 
-            title="光影纪实" 
-            items={visuals} 
-            viewMoreLink="/archive?tab=visuals" 
+          <ArchiveSection
+            title="光影纪实"
+            items={visuals}
+            viewMoreLink="/archive?tab=visuals"
             onItemClick={(_, index) => handleOpenViewer(visuals, index)}
           />
         )}
 
-        <ScenerySection viewMoreLink="/archive?tab=sceneries" />
+        {sceneries.length > 0 && (
+          <ArchiveSection
+            title="乡村景色"
+            items={sceneries}
+            viewMoreLink="/archive?tab=sceneries"
+            onItemClick={(_, index) => handleOpenViewer(sceneries, index)}
+          />
+        )}
 
         {documents.length > 0 && (
           <ArchiveSection 
