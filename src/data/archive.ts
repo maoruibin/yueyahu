@@ -8,6 +8,7 @@ export interface ArchiveItem {
   poster?: string;
   cover?: string;
   gallery?: string[];
+  hidden?: boolean;
 }
 
 const BASE_URL = 'https://s3.bitiful.net/gudong/yueyahu';
@@ -18,15 +19,17 @@ export const archiveData: ArchiveItem[] = [
     id: 'doc-4',
     type: 'document',
     title: '1954年土地证（属毛卜喇乡）',
-    description: '由村民陈廉德保留并提供，清书登记于1952年、颁发于1954年。上载明当时月牙湖（村）地块归属“永昌县二区毛卜喇乡”管辖，是建国初期土地改革及该地区基层行政管辖沿革的极珍贵历史物证。',
+    description: '由村民陈廉德保留并提供，清书登记于1952年、颁发于1954年。上载明当时月牙湖（村）地块归属”永昌县二区毛卜喇乡”管辖，是建国初期土地改革及该地区基层行政管辖沿革的极珍贵历史物证。',
     date: '1954 年',
     url: 'https://gudong.s3.bitiful.net/yueyahu/document/1952%E5%9C%9F%E5%9C%B0%E8%AF%81.jpg?no-wait=on',
     cover: 'https://gudong.s3.bitiful.net/yueyahu/document/1952%E5%9C%9F%E5%9C%B0%E8%AF%81.jpg?no-wait=on',
+    hidden: true,
   },
   {
     id: 'doc-1',
     type: 'document',
     title: '老式土地证',
+    hidden: true,
     description: '陈文德提供的老式土地证，记录着土地改革时期分田到户的历史印记。',
     date: '1954 年',
     url: `${BASE_URL}/document/老式土地证-陈文德.jpg`,
@@ -36,6 +39,7 @@ export const archiveData: ArchiveItem[] = [
     id: 'doc-2',
     type: 'document',
     title: '红山窑乡农业税及其附加分户核定表',
+    hidden: true,
     description: '曾经每家每户都要缴纳的农业税，这份核定表记录着村民对国家的贡献，如今农业税已退出历史舞台。',
     date: '1990s',
     url: `${BASE_URL}/document/红山窑乡农业税及其附加分户核定表.jpg`,
@@ -45,6 +49,7 @@ export const archiveData: ArchiveItem[] = [
     id: 'doc-3',
     type: 'document',
     title: '1991年土地承包经济合同书',
+    hidden: true,
     description: '侯作录家的土地承包合同书，详细记载了承包地块、面积及承包年限，是农村土地制度变迁的实物见证。',
     date: '1991',
     url: `${BASE_URL}/document/1991年土地承包经济合同书-侯作录/主页封面.jpg`,
@@ -80,6 +85,7 @@ export const archiveData: ArchiveItem[] = [
     id: 'vis-gallery-4',
     type: 'visual',
     title: '月牙湖的土地',
+    hidden: true,
     description: '田成荣于2023年4月实拍月牙湖各地块，输水渠、犁沟、地埂……每寸土地都刻着庄稼人的辛劳。',
     date: '2023-04',
     url: `${BASE_URL}/visual/月牙湖黑山子地西输水子渠-2023-04-06-田成荣.jpg`,
@@ -287,3 +293,5 @@ export const archiveData: ArchiveItem[] = [
     cover: `${BASE_URL}/scenery/下湖湖滩吃草睡觉的牛.jpg`,
   },
 ];
+
+export const visibleArchiveData = archiveData.filter(item => !item.hidden);

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { archiveData, ArchiveItem } from '../data/archive';
+import { visibleArchiveData as archiveData } from '../data/archive';
 import { Layout } from '../components/Layout';
 import { ArchiveSection } from '../components/ArchiveSection';
 import { CustomAudioPlayer } from '../components/CustomAudioPlayer';

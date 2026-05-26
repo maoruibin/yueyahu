@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { archiveData, ArchiveItem } from '../data/archive';
+import { visibleArchiveData, ArchiveItem } from '../data/archive';
 import { ArchiveSection } from '../components/ArchiveSection';
 import { CustomAudioPlayer } from '../components/CustomAudioPlayer';
 import { FeishuForm } from '../components/FeishuForm';
@@ -7,13 +7,13 @@ import { Layout } from '../components/Layout';
 import { ArchiveViewer } from '../components/ArchiveViewer';
 
 export function Home() {
-  const documents = archiveData.filter(item => item.type === 'document').slice(0, 6);
+  const documents = visibleArchiveData.filter(item => item.type === 'document').slice(0, 6);
 
-  const visuals = archiveData.filter(item => ['visual', 'video'].includes(item.type)).slice(0, 6);
+  const visuals = visibleArchiveData.filter(item => ['visual', 'video'].includes(item.type)).slice(0, 6);
 
-  const sceneries = archiveData.filter(item => item.type === 'scenery').slice(0, 6);
+  const sceneries = visibleArchiveData.filter(item => item.type === 'scenery').slice(0, 6);
 
-  const audios = archiveData.filter(item => item.type === 'audio').slice(0, 2);
+  const audios = visibleArchiveData.filter(item => item.type === 'audio').slice(0, 2);
 
   const [viewingIndex, setViewingIndex] = useState<number | null>(null);
   const [viewingList, setViewingList] = useState<ArchiveItem[]>([]);
