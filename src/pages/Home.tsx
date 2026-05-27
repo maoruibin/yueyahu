@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { visibleArchiveData, ArchiveItem } from '../data/archive';
+import { referenceData } from '../data/references';
 import { ArchiveSection } from '../components/ArchiveSection';
 import { CustomAudioPlayer } from '../components/CustomAudioPlayer';
+import { ReferenceSection } from '../components/ReferenceSection';
 import { FeishuForm } from '../components/FeishuForm';
 import { Layout } from '../components/Layout';
 import { ArchiveViewer } from '../components/ArchiveViewer';
@@ -86,6 +88,10 @@ export function Home() {
               ))}
             </div>
           </section>
+        )}
+
+        {referenceData.length > 0 && (
+          <ReferenceSection items={referenceData} />
         )}
 
         <FeishuForm />
