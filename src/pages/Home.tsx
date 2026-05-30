@@ -67,14 +67,14 @@ export function Home() {
           }
         `}</style>
 
-        {/* Horizontal Scrolling Image Rows */}
-        <div className="absolute inset-0 flex flex-col gap-3 justify-center py-4 select-none pointer-events-none">
+        {/* Horizontal Scrolling Image Rows - Option A: Seamless Filmstrip Style */}
+        <div className="absolute inset-0 flex flex-col gap-[2px] justify-center py-4 select-none pointer-events-none">
           {rows.map((row, rowIndex) => {
             const tripled = [...row, ...row, ...row];
             return (
               <div key={rowIndex} className="overflow-hidden">
                 <div
-                  className="flex w-max gap-3 whitespace-nowrap mask-edges-horizontal"
+                  className="flex w-max gap-[2px] whitespace-nowrap mask-edges-horizontal"
                   style={{
                     animation: `${rowIndex % 2 === 0 ? 'scrollRowRight' : 'scrollRowLeft'} ${rowSpeeds[rowIndex % 5]}s linear infinite`,
                   }}
@@ -84,7 +84,7 @@ export function Home() {
                       key={idx}
                       src={img}
                       alt=""
-                      className="h-28 w-[149px] md:h-36 md:w-[192px] lg:h-40 lg:w-[213px] aspect-[4/3] object-cover rounded-lg flex-shrink-0 shadow-sm blur-[2px] bg-surface/60 dark:bg-zinc-800/40"
+                      className="h-28 w-[149px] md:h-36 md:w-[192px] lg:h-40 lg:w-[213px] aspect-[4/3] object-cover flex-shrink-0 rounded-none shadow-none blur-[2px] bg-surface/60 dark:bg-zinc-800/40"
                       draggable={false}
                     />
                   ))}
@@ -99,12 +99,12 @@ export function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-gold)_0%,transparent_80%)] opacity-[0.05] pointer-events-none"></div>
 
         {/* Floating Text — direct on photos with adaptive typography */}
-        <div className="relative z-10 max-w-4xl mx-auto px-4 py-20 md:py-32 flex flex-col items-center text-center">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 pt-12 pb-24 md:pt-20 md:pb-44 flex flex-col items-center text-center">
           <div className="inline-block border border-subtle rounded-full px-4 py-1.5 mb-8 text-gold text-xs font-mono uppercase tracking-widest bg-surface/50 backdrop-blur-sm shadow-sm">
             ? - {new Date().getFullYear()}
           </div>
 
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-light text-primary mb-8 leading-tight tracking-wide drop-shadow-[0_2px_10px_rgba(255,255,255,0.9)] dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.7)]">
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-light text-primary mb-4 leading-tight tracking-wide drop-shadow-[0_2px_10px_rgba(255,255,255,0.9)] dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.7)]">
             时间的胶囊<br className="hidden md:block" />
             <span className="md:hidden">，</span>
             故土的记忆
