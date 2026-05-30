@@ -11,7 +11,7 @@ export function FeishuForm() {
           参与共建：留下您的时代印记
         </h2>
         <p className="text-muted text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
-          如果您手中也保存着关于月牙湖村五社、六社的老照片、旧土地证、录音，或者任何带有岁月痕迹的物件，欢迎您提供给我们。历史不应被遗忘，让我们共同丰富这座云端档案馆。
+          如果您手中保存着关于月牙湖村（五社、六社）的老照片、旧物件或乡音录音，欢迎提供给我们，共同守护这片云端记忆。
         </p>
         
         <a 
@@ -19,15 +19,13 @@ export function FeishuForm() {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary text-base font-medium hover:bg-gold transition-all duration-300 group shadow-md"
-          // In light mode, primary is dark text, so we need inverse text on primary block... wait.
-          // Let's explicitly set the button text and background
         >
-          <span className="text-inverse">提交老资料 (飞书表单)</span>
+          <span className="text-inverse">提交历史资料 (飞书表单)</span>
           <ArrowUpRight size={18} className="text-inverse group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </a>
         
         <div className="mt-8 text-xs text-muted opacity-70">
-          * 您的资料提交后，我们将进行筛选与整理，并使用数字水印技术保护您的版权与隐私。
+          * 提交的资料将经整理并使用数字水印技术保护版权与隐私。
         </div>
       </div>
     </section>

@@ -11,6 +11,13 @@ export interface ArchiveItem {
   hidden?: boolean;
 }
 
+export interface WallPhoto {
+  url: string;
+  albumId: string;
+  albumTitle: string;
+  isAlbumBoundary: boolean;
+}
+
 const BASE_URL = 'https://s3.bitiful.net/gudong/yueyahu';
 
 export const archiveData: ArchiveItem[] = [
@@ -292,6 +299,112 @@ export const archiveData: ArchiveItem[] = [
     url: `${BASE_URL}/scenery/下湖湖滩吃草睡觉的牛.jpg`,
     cover: `${BASE_URL}/scenery/下湖湖滩吃草睡觉的牛.jpg`,
   },
+
+  // 陈兴明 2013年拍摄
+  {
+    id: 'scenery-gallery-13',
+    type: 'scenery',
+    title: '下湖的风光',
+    date: '2013',
+    description: '陈兴明于2013年拍摄的下湖区域，溪水潺潺、山头连绵、院落静谧，记录了下湖最原汁原味的自然风貌。',
+    url: `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖院子.jpg`,
+    gallery: [
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖院子.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖院子2.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖院子的树.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖地.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖山坡.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖山头.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖山头土房子.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖山腰.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖水源地.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖溪水.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/下湖园子种植区.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/湖泊地下湖园子.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/从下湖看杏树园子.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/远处看下湖.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/站在下湖山上.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-下湖风光/冬天的下湖.jpg`,
+    ],
+  },
+  {
+    id: 'scenery-gallery-14',
+    type: 'scenery',
+    title: '月牙湖的山野',
+    date: '2013',
+    description: '陈兴明镜头下的月牙湖山野地貌，黄毛坡、豁落、沟壑、沙梁……粗犷的西北大地上，每道褶皱都是岁月的痕迹。',
+    url: `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/站在后山看村子.jpg`,
+    gallery: [
+      `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/站在后山看村子.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/黄毛坡.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/大豁落.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/新豁落2.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/前山坡头.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/偷牛沟.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/沙梁头.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-山野地貌/坑坑地.jpg`,
+    ],
+  },
+  {
+    id: 'scenery-gallery-15',
+    type: 'scenery',
+    title: '月牙湖的土长城',
+    date: '2013',
+    description: '陈兴明拍摄的土长城遗址，蜿蜒于山脊之上，历经风雨剥蚀仍依稀可见当年的雄姿，是这片土地最厚重的历史印记。',
+    url: `${BASE_URL}/scenery/2013年-陈兴明-土长城/土长城.jpg`,
+    gallery: [
+      `${BASE_URL}/scenery/2013年-陈兴明-土长城/土长城.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-土长城/破碎的土长城.jpg`,
+      `${BASE_URL}/scenery/2013年-陈兴明-土长城/站在土长城.jpg`,
+    ],
+  },
+  {
+    id: 'vis-gallery-7',
+    type: 'visual',
+    title: '月牙湖的村貌田园',
+    date: '2013',
+    description: '陈兴明于2013年记录的月牙湖村貌：羊圈里归来的羊群、田边酣睡的老牛、斑驳的老榆树、熟悉的篮球场……每一帧都是远去却未消散的乡愁。',
+    url: `${BASE_URL}/visual/2013年-陈兴明-村貌田园/老榆树.jpg`,
+    gallery: [
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/老榆树.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/篮球场.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/杏树院子.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/杏树院子拐角.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/园墙拐.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/新圈.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/新圈2.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/陈永志房后.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/王家房房的两棵树.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/张家槽子.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/张家槽子地道们.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/放羊.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/山里的羊圈.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/山里的羊房子.jpg`,
+      `${BASE_URL}/visual/2013年-陈兴明-村貌田园/吃完睡正在睡觉的牛.jpg`,
+    ],
+  },
+  {
+    id: 'vis-gallery-8',
+    type: 'visual',
+    title: '月牙湖的老房子',
+    date: '年代未知',
+    description: '旧大路上柴万金的房子，还有那扇不知推过多少次的老旧木门。砖瓦斑驳，门框倾斜，岁月在它们身上留下了深深的痕迹。',
+    url: `${BASE_URL}/visual/年代未知-月牙湖的老房子/老旧的门.jpg`,
+    gallery: [
+      `${BASE_URL}/visual/年代未知-月牙湖的老房子/老旧的门.jpg`,
+      `${BASE_URL}/visual/年代未知-月牙湖的老房子/旧大路上柴万金的房子.png`,
+    ],
+  },
 ];
 
 export const visibleArchiveData = archiveData.filter(item => !item.hidden);
+
+export const contributors = [
+  { name: '毛瑞斌', role: '发起维护' },
+  { name: '陈廉德', role: '提供文献' },
+  { name: '陈文德', role: '提供文献' },
+  { name: '侯作录', role: '提供文献' },
+  { name: '田成荣', role: '实拍照片' },
+  { name: '陈兴明', role: '拍摄照片' },
+  { name: '宋国荣', role: '撰文吟咏' },
+];

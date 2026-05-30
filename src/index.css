@@ -39,6 +39,8 @@
   
   --accent-gold: #B28822; /* Darker gold for light mode text readability */
   --accent-gold-hover: #967015;
+
+  --hero-vignette: radial-gradient(ellipse 75% 65% at center, rgba(244, 241, 234, 0.85) 0%, rgba(244, 241, 234, 0.35) 50%, transparent 100%);
 }
 
 .dark {
@@ -58,6 +60,8 @@
   
   --accent-gold: #D4AF37;
   --accent-gold-hover: #E5C354;
+
+  --hero-vignette: radial-gradient(ellipse 75% 65% at center, rgba(18, 18, 18, 0.85) 0%, rgba(18, 18, 18, 0.35) 50%, transparent 100%);
 }
 
 body {

@@ -1,42 +1,240 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { X, ExternalLink, ChevronLeft, ChevronRight, Info, Download } from 'lucide-react';
-import { ArchiveItem } from '../data/archive';
+import { ArchiveItem, WallPhoto } from '../data/archive';
 import { ProtectedMedia } from './ProtectedMedia';
 // @ts-ignore
 import { motion, AnimatePresence } from 'motion/react';
 
-function extractImageName(url: string, mainTitle: string) {
+function extractImageName(url: string) {
   try {
     const filename = url.split('/').pop() || '';
     const decoded = decodeURIComponent(filename);
     const nameWithoutExt = decoded.replace(/\.[^/.]+$/, "");
-    
-    // If the name is basically the same as the main title or generic, we can choose to hide it or show it.
-    // Let's just return it nicely formatted.
-    // If it contains dashes, maybe we just return as is.
     return nameWithoutExt.replace(/-/g, ' ');
-  } catch (e) {
+  } catch {
     return '';
   }
 }
 
-export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { items: ArchiveItem[], initialIndex: number | null, onClose: () => void }) {
+interface ArchiveViewerProps {
+  items: ArchiveItem[];
+  initialIndex: number | null;
+  onClose: () => void;
+  wallPhotos?: WallPhoto[];
+  initialWallPhotoIndex?: number | null;
+}
+
+export function ArchiveViewer({ items = [], initialIndex = null, onClose, wallPhotos, initialWallPhotoIndex }: ArchiveViewerProps) {
   const [itemIndex, setItemIndex] = useState<number>(0);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [showInfo, setShowInfo] = useState(false);
 
+  // Wall mode state
+  const [wallIndex, setWallIndex] = useState(0);
+
+  const isWallMode = !!wallPhotos && wallPhotos.length > 0;
+
   useEffect(() => {
-    if (initialIndex !== null) {
+    if (isWallMode && initialWallPhotoIndex !== null && initialWallPhotoIndex !== undefined) {
+      setWallIndex(initialWallPhotoIndex);
+      setDirection(0);
+      setShowInfo(false);
+    } else if (initialIndex !== null) {
       setItemIndex(initialIndex);
       setGalleryIndex(0);
       setDirection(0);
       setShowInfo(false);
     }
-  }, [initialIndex]);
+  }, [initialIndex, initialWallPhotoIndex, isWallMode]);
 
-  if (initialIndex === null) return null;
+  const isOpen = isWallMode ? initialWallPhotoIndex !== null && initialWallPhotoIndex !== undefined : initialIndex !== null;
+  if (!isOpen) return null;
 
+  // ===== WALL MODE =====
+  if (isWallMode) {
+    const currentPhoto = wallPhotos![wallIndex];
+    if (!currentPhoto) return null;
+
+    // Find all photos in the same album for thumbnails
+    const currentAlbumPhotos = wallPhotos!.filter(p => p.albumId === currentPhoto.albumId);
+    const localIndex = currentAlbumPhotos.findIndex(p => p.url === currentPhoto.url);
+    const albumTitle = currentPhoto.albumTitle;
+    const imageName = extractImageName(currentPhoto.url);
+
+    const paginateWall = (newDirection: number) => {
+      setDirection(newDirection);
+      setWallIndex((wallIndex + newDirection + wallPhotos!.length) % wallPhotos!.length);
+    };
+
+    return (
+      <div className="fixed inset-0 z-[100] flex flex-col bg-black transition-colors font-sans overflow-hidden">
+        <div className="absolute top-0 inset-x-0 h-20 flex items-center justify-between px-6 md:px-12 z-[60] bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
+          <div className="pointer-events-auto">
+            <h2 className="text-white font-serif text-base md:text-xl lg:text-2xl tracking-wide select-none drop-shadow-md">
+              {albumTitle}
+            </h2>
+          </div>
+          <div className="flex items-center gap-3 pointer-events-auto">
+            <button
+              onClick={() => setShowInfo(!showInfo)}
+              className={`w-10 h-10 flex items-center justify-center rounded-full transition-all backdrop-blur-md border ${
+                showInfo ? 'bg-gold text-white border-gold' : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+              }`}
+              title="查看详情"
+            >
+              <Info size={20} strokeWidth={1.5} />
+            </button>
+            <button
+              onClick={onClose}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all backdrop-blur-md border border-white/10"
+            >
+              <X size={20} strokeWidth={1.5} />
+            </button>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {showInfo && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="absolute bottom-24 left-6 right-6 md:left-12 md:right-auto md:w-96 z-[70] bg-zinc-900/90 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-2xl"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-gold font-serif text-xl leading-tight">{albumTitle}</h3>
+                </div>
+                <button
+                  onClick={() => setShowInfo(false)}
+                  className="text-white/20 hover:text-white transition-colors"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="text-white/60 text-xs font-mono mt-1">
+                来自相册：{albumTitle}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex-1 relative flex items-center justify-center w-full h-full">
+          {wallPhotos!.length > 1 && (
+            <>
+              <button
+                onClick={() => paginateWall(-1)}
+                className="absolute left-0 inset-y-0 w-16 md:w-32 z-40 flex items-center justify-center group cursor-w-resize"
+              >
+                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 text-white/50 group-hover:bg-white/20 group-hover:text-white transition-all">
+                  <ChevronLeft size={32} strokeWidth={1} />
+                </div>
+              </button>
+              <button
+                onClick={() => paginateWall(1)}
+                className="absolute right-0 inset-y-0 w-16 md:w-32 z-40 flex items-center justify-center group cursor-e-resize"
+              >
+                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 text-white/50 group-hover:bg-white/20 group-hover:text-white transition-all">
+                  <ChevronRight size={32} strokeWidth={1} />
+                </div>
+              </button>
+            </>
+          )}
+
+          <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
+            <AnimatePresence initial={false} custom={direction} mode="popLayout">
+              <motion.div
+                key={`wall-${wallIndex}`}
+                custom={direction}
+                variants={{
+                  enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0, scale: 0.9 }),
+                  center: { zIndex: 1, x: 0, opacity: 1, scale: 1 },
+                  exit: (dir: number) => ({ zIndex: 0, x: dir < 0 ? '100%' : '-100%', opacity: 0, scale: 0.9 }),
+                }}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: "spring", stiffness: 300, damping: 35 },
+                  opacity: { duration: 0.2 },
+                  scale: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+                }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={(_e: unknown, { offset, velocity }: { offset: { x: number }; velocity: { x: number } }) => {
+                  const swipe = Math.abs(offset.x) * velocity.x;
+                  if (swipe < -500 || offset.x < -50) paginateWall(1);
+                  else if (swipe > 500 || offset.x > 50) paginateWall(-1);
+                }}
+                className="absolute inset-0 flex justify-center items-center p-2 md:p-10 z-30"
+              >
+                <ProtectedMedia>
+                  <img
+                    src={currentPhoto.url}
+                    alt={albumTitle}
+                    className="max-w-full max-h-[95vh] object-contain shadow-2xl rounded-sm select-none"
+                    draggable={false}
+                  />
+                </ProtectedMedia>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+
+        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-24 pb-4 px-6 md:px-12 z-50 flex flex-col items-center">
+          <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex-1 order-2 md:order-1 text-center md:text-left">
+              <motion.div
+                key={imageName || albumTitle}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-white text-base md:text-xl font-medium drop-shadow-2xl"
+              >
+                {imageName || albumTitle}
+              </motion.div>
+            </div>
+
+            {currentAlbumPhotos.length > 1 && (
+              <div className="w-full md:w-auto flex items-center justify-center md:justify-end order-1 md:order-2">
+                <div className="flex gap-2 max-w-[85vw] md:max-w-md overflow-x-auto py-1.5 px-1 hide-scrollbar scroll-smooth">
+                  {currentAlbumPhotos.map((p, i) => (
+                    <button
+                      key={`${p.albumId}-${i}`}
+                      onClick={() => {
+                        const globalIdx = wallPhotos!.indexOf(p);
+                        setDirection(globalIdx > wallIndex ? 1 : -1);
+                        setWallIndex(globalIdx);
+                      }}
+                      className={`relative flex-shrink-0 w-8 h-8 md:w-12 md:h-12 rounded overflow-hidden transition-all duration-300 border ${
+                        i === localIndex
+                          ? 'border-gold ring-1 ring-gold scale-110 opacity-100 z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                          : 'border-white/5 opacity-25 hover:opacity-100 grayscale hover:grayscale-0'
+                      }`}
+                    >
+                      <img src={p.url} alt="" className="w-full h-full object-cover" draggable={false} />
+                    </button>
+                  ))}
+                </div>
+                <div className="ml-4 bg-white/5 px-2.5 py-1 rounded border border-white/5 text-white/40 font-mono text-[10px] tracking-tighter flex-shrink-0">
+                  {wallIndex + 1} <span className="opacity-20 font-sans mx-1">/</span> {wallPhotos!.length}
+                </div>
+              </div>
+            )}
+
+            {currentAlbumPhotos.length <= 1 && (
+              <div className="ml-4 bg-white/5 px-2.5 py-1 rounded border border-white/5 text-white/40 font-mono text-[10px] tracking-tighter flex-shrink-0">
+                {wallIndex + 1} <span className="opacity-20 font-sans mx-1">/</span> {wallPhotos!.length}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ===== ORIGINAL CARD MODE =====
   const item = items[itemIndex];
   if (!item) return null;
 
@@ -46,18 +244,16 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
 
   const paginate = (newDirection: number) => {
     setDirection(newDirection);
-    
+
     const nextGalleryIndex = galleryIndex + newDirection;
-    
-    // Within current item's gallery
+
     if (isGallery && nextGalleryIndex >= 0 && nextGalleryIndex < galleryImages.length) {
       setGalleryIndex(nextGalleryIndex);
     } else {
-      // Switch items
       const nextItemIndex = (itemIndex + newDirection + items.length) % items.length;
       const nextItem = items[nextItemIndex];
       const nextGalleryLength = nextItem.gallery?.length || 1;
-      
+
       setItemIndex(nextItemIndex);
       setGalleryIndex(newDirection > 0 ? 0 : nextGalleryLength - 1);
     }
@@ -90,30 +286,23 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
     }),
   };
 
-  const swipeConfidenceThreshold = 500;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
-  };
-
-  const currentImageUrl = isGallery ? galleryImages[galleryIndex] : 
+  const currentImageUrl = isGallery ? galleryImages[galleryIndex] :
                          (item.type === 'video' ? (item.poster || item.cover || item.url) : item.url);
-  
-  const currentImageName = extractImageName(currentImageUrl, item.title);
-  // Only show the extracted name if it's a gallery and the name seems meaningful, 
-  // or just always show it if it translates to a file name from user's upload.
+
+  const currentImageName = extractImageName(currentImageUrl);
   const showImageName = isGallery && currentImageName && currentImageName !== item.title;
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-black transition-colors font-sans overflow-hidden">
-      
-      {/* Header Bar - Minimized */}
+
+      {/* Header Bar */}
       <div className="absolute top-0 inset-x-0 h-20 flex items-center justify-between px-6 md:px-12 z-[60] bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
         <div className="pointer-events-auto">
-          <h2 className="text-white/60 text-xs md:text-sm font-serif tracking-widest uppercase opacity-40 select-none">
+          <h2 className="text-white font-serif text-base md:text-xl lg:text-2xl tracking-wide select-none drop-shadow-md">
             {item.title}
           </h2>
         </div>
-        
+
         <div className="flex items-center gap-3 pointer-events-auto">
           <button
             onClick={() => setShowInfo(!showInfo)}
@@ -124,7 +313,7 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
           >
             <Info size={20} strokeWidth={1.5} />
           </button>
-          
+
           <button
             onClick={() => { resetIndex(); onClose(); }}
             className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all backdrop-blur-md border border-white/10"
@@ -134,7 +323,7 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
         </div>
       </div>
 
-      {/* Info Popover Overlay */}
+      {/* Info Popover */}
       <AnimatePresence>
         {showInfo && (
           <motion.div
@@ -148,14 +337,14 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
                 <h3 className="text-gold font-serif text-xl leading-tight">{item.title}</h3>
                 <div className="text-white/40 text-xs font-mono mt-1">{item.date}</div>
               </div>
-              <button 
+              <button
                 onClick={() => setShowInfo(false)}
                 className="text-white/20 hover:text-white transition-colors"
               >
                 <X size={16} />
               </button>
             </div>
-            
+
             <div className="max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
               <p className="text-white/80 text-sm leading-relaxed font-light whitespace-pre-wrap">
                 {item.description}
@@ -172,14 +361,13 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
         )}
       </AnimatePresence>
 
-      {/* Main Content Area - Maximized */}
+      {/* Main Content Area */}
       <div className="flex-1 relative flex items-center justify-center w-full h-full">
-        
-        {/* Navigation - Minimal and Functional */}
+
         {((isGallery && galleryImages.length > 1) || items.length > 1) && (
           <>
-            <button 
-              onClick={() => paginate(-1)} 
+            <button
+              onClick={() => paginate(-1)}
               className="absolute left-0 inset-y-0 w-16 md:w-32 z-40 flex items-center justify-center group cursor-w-resize"
             >
               <div className="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 text-white/50 group-hover:bg-white/20 group-hover:text-white transition-all">
@@ -197,7 +385,6 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
           </>
         )}
 
-        {/* Media Container - Reduced padding significantly */}
         <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
           {isPdf ? (
             <div className="flex flex-col items-center justify-center w-full max-w-2xl bg-zinc-900/50 p-12 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm pointer-events-auto z-30 m-6">
@@ -232,13 +419,10 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={1}
-                onDragEnd={(e, { offset, velocity }) => {
-                  const swipe = swipePower(offset.x, velocity.x);
-                  if (swipe < -swipeConfidenceThreshold || offset.x < -50) {
-                    paginate(1);
-                  } else if (swipe > swipeConfidenceThreshold || offset.x > 50) {
-                    paginate(-1);
-                  }
+                onDragEnd={(_e: unknown, { offset, velocity }: { offset: { x: number }; velocity: { x: number } }) => {
+                  const swipe = Math.abs(offset.x) * velocity.x;
+                  if (swipe < -500 || offset.x < -50) paginate(1);
+                  else if (swipe > 500 || offset.x > 50) paginate(-1);
                 }}
                 className="absolute inset-0 flex justify-center items-center p-2 md:p-10 z-30"
               >
@@ -256,14 +440,13 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
         </div>
       </div>
 
-      {/* Footer Area - Adaptive and Minimal */}
+      {/* Footer */}
       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-24 pb-4 px-6 md:px-12 z-50 flex flex-col items-center">
-        
+
         <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          
-          {/* Item Name - Bottom Center on Mobile, Left on Desktop */}
+
           <div className="flex-1 order-2 md:order-1 text-center md:text-left">
-            <motion.div 
+            <motion.div
               key={currentImageName || item.title}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -271,7 +454,7 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
             >
               {currentImageName || item.title}
             </motion.div>
-            
+
             {item.type === 'video' && (
               <div className="mt-2 flex justify-center md:justify-start">
                  <a
@@ -287,7 +470,6 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
             )}
           </div>
 
-          {/* Thumbnails & Counter - Right side */}
           {isGallery && galleryImages.length > 1 && (
             <div className="w-full md:w-auto flex items-center justify-center md:justify-end order-1 md:order-2">
               <div className="flex gap-2 max-w-[85vw] md:max-w-md overflow-x-auto py-1.5 px-1 hide-scrollbar scroll-smooth">
@@ -296,8 +478,8 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
                     key={i}
                     onClick={() => jumpTo(i)}
                     className={`relative flex-shrink-0 w-8 h-8 md:w-12 md:h-12 rounded overflow-hidden transition-all duration-300 border ${
-                      i === galleryIndex 
-                        ? 'border-gold ring-1 ring-gold scale-110 opacity-100 z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)]' 
+                      i === galleryIndex
+                        ? 'border-gold ring-1 ring-gold scale-110 opacity-100 z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)]'
                         : 'border-white/5 opacity-25 hover:opacity-100 grayscale hover:grayscale-0'
                     }`}
                   >
@@ -305,8 +487,7 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
                   </button>
                 ))}
               </div>
-              
-              {/* Counter */}
+
               <div className="ml-4 bg-white/5 px-2.5 py-1 rounded border border-white/5 text-white/40 font-mono text-[10px] tracking-tighter flex-shrink-0">
                 {galleryIndex + 1} <span className="opacity-20 font-sans mx-1">/</span> {galleryImages.length}
               </div>
@@ -317,4 +498,3 @@ export function ArchiveViewer({ items = [], initialIndex = null, onClose }: { it
     </div>
   );
 }
-
